@@ -1,3 +1,14 @@
+# Ignore everything
+*
+
+# Allow only specific directories and files
+!lib/
+!lib/**
+!assets/
+!assets/**
+!pubspec.yaml
+
+
 # Miscellaneous
 *.class
 *.log
