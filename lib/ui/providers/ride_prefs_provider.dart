@@ -23,19 +23,15 @@ class RidesPreferencesProvider extends ChangeNotifier {
   }
   
  if(pref!= null){
-    bool isInHistory=_pastPreferences.contains(pref);
-    if(!isInHistory){
-      _pastPreferences.add(pref);
-      //add data to repo
-      _addPreference(pref);
-  }
+   _pastPreferences.removeWhere((e)=>e==pref);
+    _addPreference(pref);
  }
 
  notifyListeners();
  }
 
  void _addPreference(RidePreference preference) {
-  return repository.addPreference(preference);
+  repository.addPreference(preference);
  }
 
  // History is returned from newest to oldest preference

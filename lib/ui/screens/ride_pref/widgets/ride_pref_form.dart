@@ -61,6 +61,32 @@ class _RidePrefFormState extends State<RidePrefForm> {
       requestedSeats = 1; // 1 seat book by default
     }
   }
+  
+  @override
+  void didUpdateWidget(covariant RidePrefForm oldWidget){
+    super.didUpdateWidget(oldWidget);
+    if(widget.initialPreference!=oldWidget.initialPreference)
+    {
+      if(widget.initialPreference!=null){
+        RidePreference current=widget.initialPreference!;
+        setState(() {
+          departure=current.departure;
+          arrival=current.arrival;
+          departureDate=current.departureDate;
+          requestedSeats=current.requestedSeats;
+        });
+      }
+      else{
+        setState(() {
+          departure=null;
+          arrival=null;
+          departureDate=DateTime.now();
+          requestedSeats=1;
+        });
+      }
+    }
+
+  }
 
   
   
