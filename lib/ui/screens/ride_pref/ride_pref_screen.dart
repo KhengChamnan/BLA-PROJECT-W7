@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week_3_blabla_project/ui/providers/async_value.dart';
 import 'package:week_3_blabla_project/ui/providers/ride_prefs_provider.dart';
 
 import '../../../model/ride/ride_pref.dart';
@@ -35,7 +36,13 @@ class RidePrefScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final provider = context.watch<RidesPreferencesProvider>();
     final RidePreference? currentRidePreference = provider.currentPreference;
-    final pastPreferences = provider.preferencesHistory;
+    switch(provider.pastPreferences.state){
+      case AsyncValueState.loading:
+        return const BlaError(message: "Loading ..."); // Loading state
+      case AsyncValueState.error:
+        return BlaError(message:'No connection' );
+      case AsyncValueState.success:
+      final pastPreferences=provider.preferencesHistory;
     return Stack(
       children: [
         // 1 - Background  Image
@@ -88,6 +95,7 @@ class RidePrefScreen extends StatelessWidget {
         ),
       ],
     );
+    }
   }
 }
 
@@ -102,6 +110,21 @@ class BlaBackground extends StatelessWidget {
       child: Image.asset(
         blablaHomeImagePath,
         fit: BoxFit.cover, // Adjust image fit to cover the container
+      ),
+    );
+  }
+}
+
+class BlaError extends StatelessWidget {
+  final String message;
+  const BlaError({super.key,required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Text(
+        message,
+        style: BlaTextStyles.body,
       ),
     );
   }
