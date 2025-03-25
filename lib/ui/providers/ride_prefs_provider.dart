@@ -36,6 +36,7 @@ class RidesPreferencesProvider extends ChangeNotifier {
   void setCurrentPreferrence(RidePreference? pref) {
     if (_currentPreference != pref) {
       _currentPreference = pref;
+      notifyListeners();
     }
 
     if (pref != null) {
@@ -43,20 +44,26 @@ class RidesPreferencesProvider extends ChangeNotifier {
       currentPrefs.removeWhere((e) => e == pref);
       _addPreference(pref);
     }
-
-    notifyListeners();
   }
 
+
+
   void _addPreference(RidePreference preference) async {
-    try {
-      await repository.addPreference(preference);
-      await fetchPastPreferences();
-    } catch (e) {
-      // Handle error
-      pastPreferences = AsyncValue.error(e);
+    await repository.addPreference(preference);
+
+    // Use a temporary list to check for duplicates
+    final List<RidePreference> currentPrefs =
+        List<RidePreference>.from(pastPreferences.data ?? []);
+
+    // Check if the preference already exists
+    if (!currentPrefs.contains(preference)) {
+      // Add to cache only if it doesn't already exist
+      pastPreferences.data!.add(preference);
     }
     notifyListeners();
   }
+
+
 
   // History is returned from newest to oldest preference
   List<RidePreference> get preferencesHistory =>

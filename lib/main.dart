@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:week_3_blabla_project/data/repository/local/local_ride_preferences_repository.dart';
 import 'package:week_3_blabla_project/ui/providers/ride_prefs_provider.dart';
 import 'data/repository/mock/mock_locations_repository.dart';
 import 'data/repository/mock/mock_rides_repository.dart';
@@ -11,6 +12,7 @@ import 'ui/screens/ride_pref/ride_pref_screen.dart';
 import 'ui/theme/theme.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   // 1 - Initialize the services
   LocationsService.initialize(MockLocationsRepository());
   RidesService.initialize(MockRidesRepository());
@@ -21,7 +23,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(
           create: (context) => RidesPreferencesProvider(
-            repository: MockRidePreferencesRepository(),
+            repository: LocalRidePreferencesRepository(),
           ),
         ),
       ],
